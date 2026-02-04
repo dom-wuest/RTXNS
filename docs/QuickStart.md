@@ -1,4 +1,5 @@
 # RTX Neural Shading: Quick Start Guide
+RTX Neural Shading can be build and run on both Windows and Linux
 
 ## Build steps
 
@@ -8,31 +9,38 @@
    git clone --recursive https://github.com/NVIDIA-RTX/RTXNS
    ```
 
-2. Configure and then generate the solution using CMake GUI (or the CLI) by setting the repository root as _source_ and specifying a new _build_ directory in the root.
+2. Create a build directory:
    
    ```
-   cd Rtxns
+   cd RTXNS
    mkdir build
-   cd build
-   cmake ..
+
    ```
-   To enable DX12 Cooperative Vector set the option `ENABLE_DX12_COOP_VECTOR_PREVIEW` on.
+3. Configure the build using your preferred CMake generator.
+
+   ```
+   cmake -S . -B build -G <generator>
+   ```
+
+   To enable the DX12 Cooperative Vector preview set the option `ENABLE_DX12_COOP_VECTOR_PREVIEW` on (Windows only).
    ```
    cmake -DENABLE_DX12_COOP_VECTOR_PREVIEW=ON
    ```
 
-3. Open build/RtxNeuralShading.sln in Visual Studio and build all projects, or build using the CMake CLI
+4. Open build/RtxNeuralShading.sln in Visual Studio and build all projects, or build using the CMake CLI:
    
    ```
-   cmake --build .
+   cmake --build build --config Release
+
    ```
 
-4. All of the binaries can be found in `\bin` such as
+5. All of the sample binaries can be found in `/bin` such as
    
    ```
-   bin\Debug\SimpleInferencing.exe
+   bin/<platform>/SimpleInferencing
+   ```
 
-5. Each of the samples can be build and launched as either DX12 or Vulkan with the respective commandline: `-dx12` or `-vk` 
+6. The samples can be launched as either DX12 or Vulkan where supported with the respective commandline: `-dx12` or `-vk` 
 
 ## About
 

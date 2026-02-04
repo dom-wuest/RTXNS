@@ -25,7 +25,11 @@ constexpr float UI_LOSS_AXIS_MAX = 1.0f;
 constexpr float UI_LOSS_AXIS_MIN = 1e-3f;
 } // namespace
 
-ResultsWidget::ResultsWidget()
+ResultsWidget::ResultsWidget() : m_maxEpochs(UI_MAX_EPOCHS), m_lossAxisMin(UI_LOSS_AXIS_MIN), m_lossAxisMax(UI_LOSS_AXIS_MAX)
+{
+}
+
+ResultsWidget::ResultsWidget(float maxEpoch, float lossAxisMin, float lossAxisMax) : m_maxEpochs(maxEpoch), m_lossAxisMin(lossAxisMin), m_lossAxisMax(lossAxisMax)
 {
 }
 
@@ -34,13 +38,13 @@ void ResultsWidget::Draw()
     // Graphs
     if (!m_epochHistory.empty() && !m_averageL2LossHistory.empty())
     {
-        ImPlot::SetNextAxisLimits(ImAxis_X1, m_epochHistory.front(), m_epochHistory.front() + UI_MAX_EPOCHS - 1, ImPlotCond_Always);
+        ImPlot::SetNextAxisLimits(ImAxis_X1, m_epochHistory.front(), m_epochHistory.front() + m_maxEpochs - 1, ImPlotCond_Always);
         if (ImPlot::BeginPlot("Training UI"))
         {
             ImPlot::SetupAxis(ImAxis_X1, "Epochs", ImPlotAxisFlags_LockMin | ImPlotAxisFlags_LockMax);
             ImPlot::SetupAxis(ImAxis_Y1, "L2 Loss", ImPlotAxisFlags_LockMin | ImPlotAxisFlags_LockMax);
             ImPlot::SetupAxisScale(ImAxis_Y1, ImPlotScale_Log10);
-            ImPlot::SetupAxisLimits(ImAxis_Y1, UI_LOSS_AXIS_MIN, UI_LOSS_AXIS_MAX, ImGuiCond_Always);
+            ImPlot::SetupAxisLimits(ImAxis_Y1, m_lossAxisMin, m_lossAxisMax, ImGuiCond_Always);
             ImPlot::PlotLine("Line", m_epochHistory.data(), m_averageL2LossHistory.data(), static_cast<int>(m_epochHistory.size()));
 
             ImPlot::EndPlot();
@@ -56,7 +60,7 @@ void ResultsWidget::Reset()
 
 void ResultsWidget::Update(const TrainingResults& trainingResults)
 {
-    if (m_epochHistory.size() > UI_MAX_EPOCHS - 1)
+    if (m_epochHistory.size() > m_maxEpochs - 1)
     {
         m_epochHistory.erase(m_epochHistory.begin());
         m_averageL2LossHistory.erase(m_averageL2LossHistory.begin());

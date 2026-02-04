@@ -12,6 +12,8 @@ import CooperativeVectorAutoDiff;
 import CooperativeVectorFunctions;
 import Utils;
 
+#define LOSS_EPSILON 0.01f
+
 namespace rtxns
 {
 namespace mlp
@@ -74,12 +76,12 @@ namespace mlp
     {
         static CoopVec<T, K> value(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return scale * abs(predicted - target) / (abs(predicted) + CoopVec<T, K>(T(0.01)));
+            return scale * abs(predicted - target) / (abs(predicted) + CoopVec<T, K>(LOSS_EPSILON));
         }
 
         static CoopVec<T, K> deriv(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return copysign(scale, predicted - target) / (abs(predicted) + CoopVec<T, K>(T(0.01)));
+            return copysign(scale, predicted - target) / (abs(predicted) + CoopVec<T, K>(LOSS_EPSILON));
         }
     };
 
@@ -88,12 +90,12 @@ namespace mlp
     {
         static CoopVec<T, K> value(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return scale * abs(predicted - target) / (abs(target) + CoopVec<T, K>(T(0.01)));
+            return scale * abs(predicted - target) / (abs(target) + CoopVec<T, K>(LOSS_EPSILON));
         }
 
         static CoopVec<T, K> deriv(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return copysign(scale, predicted - target) / (abs(target) + CoopVec<T, K>(T(0.01)));
+            return copysign(scale, predicted - target) / (abs(target) + CoopVec<T, K>(LOSS_EPSILON));
         }
     };
 
@@ -102,12 +104,12 @@ namespace mlp
     {
         static CoopVec<T, K> value(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return scale * abs(predicted - target) / ((abs(target) + abs(predicted)) * T(0.5) + CoopVec<T, K>(T(0.01)));
+            return scale * abs(predicted - target) / ((abs(target) + abs(predicted)) * T(0.5) + CoopVec<T, K>(LOSS_EPSILON));
         }
 
         static CoopVec<T, K> deriv(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return copysign(scale, predicted - target) / ((abs(target) + abs(predicted))*T(0.5) + CoopVec<T, K>(T(0.01)));
+            return copysign(scale, predicted - target) / ((abs(target) + abs(predicted))*T(0.5) + CoopVec<T, K>(LOSS_EPSILON));
         }
     };
 
@@ -130,12 +132,20 @@ namespace mlp
     {
         static CoopVec<T, K> value(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return scale * (predicted - target) * (predicted - target) / (predicted * predicted + CoopVec<T, K>(T(0.01)));
+            float sum = LOSS_EPSILON;
+            [ForceUnroll]
+            for (int i = 0; i < K; ++i)
+                sum += target[i].toFloat() * target[i].toFloat();
+            return scale * (predicted - target) * (predicted - target) * T(1 / sum);
         }
 
         static CoopVec<T, K> deriv(CoopVec<T, K> target, CoopVec<T, K> predicted, CoopVec<T, K> scale)
         {
-            return T(2) * scale * (predicted - target) / (predicted * predicted + CoopVec<T, K>(T(0.01)));
+            float sum = LOSS_EPSILON;
+            [ForceUnroll]
+            for (int i = 0; i < K; ++i)
+                sum += target[i].toFloat() * target[i].toFloat();
+            return scale * (predicted - target) * T(2.f / sum);
         }
     };
 }

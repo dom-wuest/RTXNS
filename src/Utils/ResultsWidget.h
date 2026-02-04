@@ -19,6 +19,7 @@ class ResultsWidget : public IWidget
 {
 public:
     ResultsWidget();
+    ResultsWidget(float maxEpoch, float lossAxisMin, float lossAxisMax);
     void Draw() override;
     void Reset();
     void Update(const TrainingResults& trainingResults);
@@ -26,4 +27,8 @@ public:
 private:
     std::vector<float> m_epochHistory;
     std::vector<float> m_averageL2LossHistory;
+
+    const float m_maxEpochs;
+    const float m_lossAxisMin;
+    const float m_lossAxisMax;
 };

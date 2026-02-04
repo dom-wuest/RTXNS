@@ -710,7 +710,7 @@ public:
                 psoDesc.primType = nvrhi::PrimitiveType::TriangleList;
                 psoDesc.renderState.depthStencilState.depthTestEnable = false;
 
-                pass.pipeline = GetDevice()->createGraphicsPipeline(psoDesc, framebuffer);
+                pass.pipeline = GetDevice()->createGraphicsPipeline(psoDesc, framebuffer->getFramebufferInfo());
             }
 
             if (viewIndex == 0)

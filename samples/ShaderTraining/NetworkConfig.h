@@ -17,7 +17,7 @@
 #define BATCH_SIZE (1 << 16)
 #define BATCH_COUNT 100
 
-#define LEARNING_RATE 1e-2f
+#define LEARNING_RATE 0.001f
 #define COMPONENT_WEIGHTS float4(1.f, 10.f, 1.f, 5.f)
 
 #define NUM_TRANSITIONS (NUM_HIDDEN_LAYERS + 1)

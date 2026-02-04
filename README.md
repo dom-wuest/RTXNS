@@ -1,6 +1,6 @@
 # RTX Neural Shading
 
-RTX Neural Shading (RTXNS) also known as RTX Neural Shaders, is intended as a starting point for developers interested in bringing Machine Learning (ML) to their graphics applications. It provides a number of examples to help the reader understand how to train their own neural networks and then use those models to perform inference alongside their normal graphics rendering. 
+RTX Neural Shading (RTXNS) also known as RTX Neural Shaders, is intended as a starting point for developers interested in bringing Machine Learning (ML) to their graphics applications on Windows or Linux. It provides a number of examples to help the reader understand how to train their own neural networks and then use those models to perform inference alongside their normal graphics rendering. 
 
 RTXNS uses the [Slang](https://shader-slang.com) shading language and it utilizes either the DirectX Preview Agility SDK or the Vulkan Cooperative Vectors extension to provide access to the GPUs ML acceleration.
 
@@ -13,13 +13,21 @@ When exploring RTXNS, it is assumed that the reader is already familiar with ML 
 ## Requirements
 
 ### General
-[CMake v3.24.3][CMake] **|** [VS 2022][VS22] **|** [Slang v2025.10](https://shader-slang.com/tools/)
+[CMake v3.24.3][CMake] **|** [Slang v2025.23.1*](https://shader-slang.com/tools/)
 
-### DirectX
-[DirectX Preview Agility SDK 1.717.0-preview](https://www.nuget.org/packages/Microsoft.Direct3D.D3D12/1.717.0-preview) **|** [Microsoft DXC 1.8.2505.28](https://www.nuget.org/packages/Microsoft.Direct3D.DXC/1.8.2505.28) **|** [Geforce Shader Model 6-9-Preview Driver](https://developer.nvidia.com/downloads/shadermodel6-9-preview-driver)  **|** [Quadro Shader Model 6-9-Preview Driver](https://developer.nvidia.com/downloads/assets/secure/shadermodel6-9-preview-driver-quadro) 
+### Windows 
+[VS 2022][VS22]
 
-### Vulkan
+### Linux
+[Ninja][Ninja]
+
+### DirectX (Windows only)
+[DirectX Preview Agility SDK 1.717.0-preview*](https://www.nuget.org/packages/Microsoft.Direct3D.D3D12/1.717.0-preview) **|** [Microsoft DXC 1.8.2505.28*](https://www.nuget.org/packages/Microsoft.Direct3D.DXC/1.8.2505.28) **|** [Geforce Shader Model 6-9-Preview Driver](https://developer.nvidia.com/downloads/shadermodel6-9-preview-driver)  **|** [Quadro Shader Model 6-9-Preview Driver](https://developer.nvidia.com/downloads/assets/secure/shadermodel6-9-preview-driver-quadro) 
+
+### Vulkan (Windows and Linux)
 GPU must support the Vulkan `VK_NV_cooperative_vector` extension (minimum NVIDIA RTX 20XX) **|** [Vulkan SDK 1.3.296.0](https://vulkan.lunarg.com/sdk/home) **|** Public Driver ≥ 572.16
+
+*Downloaded automatically by CMake during configuration/build (no separate install required).
 
 ## Known Issues
 05/30/2025: When updating from v1.0.0 to v1.1.0 is it recommended to delete the cmake cache to avoid build errors.
@@ -76,6 +84,8 @@ Use the following BibTex entry to cite the usage of RTXNS in published research:
 
 See [LICENSE.md](LICENSE.MD)
 
-[VS22]: https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&channel=Release&version=VS2022&source=VSLandingPage&passive=false&cid=2030
+[VS22]: https://visualstudio.microsoft.com/
+
+[Ninja]: https://ninja-build.org/
 
 [CMake]: https://github.com/Kitware/CMake/releases/download/v3.24.3/cmake-3.24.3-windows-x86_64.msi
