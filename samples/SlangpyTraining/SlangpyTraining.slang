@@ -116,7 +116,7 @@ void TrainTexture<Model : rtxns::IModule<half, 2, 3>, Loss : rtxns::mlp::ILoss<f
     float3 predictedRGB = EvalModel(model, inputUV);
 
     // Evaluate the loss gradient
-    float3 lossGradient = rtxns::mlp::LossDerivFromVector<3, rtxns::mlp::L2Relative<float, 3>>(
+    float3 lossGradient = rtxns::mlp::LossDerivFromVector<3, Loss>(
         targetRGB, predictedRGB, lossScale);
 
     // Backpropragate gradient through network parameters
@@ -139,7 +139,7 @@ float3 EvalModel<Model: rtxns::IModule<half, 2, 3>>(Model model, no_diff float2 
 float3 EvalLoss<Loss : rtxns::mlp::ILoss<float, 3>>(float2 inputUV, float3 predictedRGB, Texture2D<float4> targetTex)
 {
     float3 targetRGB = SampleTexture(targetTex, inputUV).rgb;
-    return rtxns::mlp::LossValueFromVector<3, rtxns::mlp::L2Relative<float, 3>>(
+    return rtxns::mlp::LossValueFromVector<3, Loss>(
         targetRGB, predictedRGB, 1.0f);
 }
 
